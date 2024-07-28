@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GituserApi</title>
+</head>
+<style>
+    .main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+    } 
+     input{
+        width: 90%;
+        height: 30px;
+        outline: none;
+        border-radius: 5px;
+    }
+    .btn{
+        border: none;
+        background-color: cadetblue;
+        width: 35vw;
+        padding: 5px;
+        border-radius: 50px;
+        color: aliceblue;
+        font-size: 20px;
+    } 
+    ul{
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    a{
+        text-decoration: none;
+        color: green;
+    }
+    img{
+        border-radius: 500px;
+        height: 200px;
+    }
+</style>
+<body>
+    <main class="main">
+            <h3>Type in Github Usernames below</h3>
+            <input type="text" name="" id="" class="input">
+            <button class="btn" onclick="fetchData()"> Get User</button>
+    </main>
+
+    <script>
+        const baseurl = "https://api.github.com/users";
+        let btn = document.querySelector('.btn'); 
+        const fetchData = async() => {
+
+            btn.textContent = "Fetching ..."
+            const main = document.querySelector(".main")
+            const input = document.querySelector(".input").value;
+            const response = await fetch(`${baseurl}/${input}`);
+            if(!response.ok){
+                btn.textContent = "Get User"
+                const h2Element = document.createElement("h2")
+                h2Element.className = "h2-element"
+                const ulEle = document.querySelector(".ul-element");
+                ulEle.style.display = "none"
+                const h2TextNode = document.createTextNode(input + ' : not a github user')
+                console.log(input + ' not a github user');
+                h2Element.appendChild(h2TextNode);
+               return main.appendChild(h2Element);
+
+            }
+            const responseData = await response.json();
+            btn.textContent = "Get User"
+            const h2ele = document.querySelector(".h2-element");
+            if(h2ele){
+                h2ele.style.display = "none"
+            }
+            // const {data} = responseData;
+            // console.log(responseData);
+            const ulElement = document.createElement("ul");
+            ulElement.className = 'ul-element'
+                const nameElement = document.createElement("li");
+                const idElement = document.createElement("li");
+                const followersElement = document.createElement("li");
+                const followingElement = document.createElement("li");
+                const repos = document.createElement("a");
+                const image = document.createElement("img");
+
+                const nameTextNode = document.createTextNode(`Username : ${responseData.login}`);
+                const idTextNode = document.createTextNode(`UserID : ${responseData.id}`);
+                const followersTextNode = document.createTextNode(`${responseData.followers} : Followers`);
+                const followingTextNode = document.createTextNode(`Following : ${responseData.following}`);
+
+                nameElement.appendChild(nameTextNode);
+                idElement.appendChild(idTextNode);
+                followersElement.appendChild(followersTextNode);
+                followingElement.appendChild(followingTextNode);
+
+                repos.href = responseData.html_url;
+                repos.innerHTML = "VISIT USER PROFILE";
+                image.src = responseData.avatar_url;
+
+                ulElement.appendChild(image);
+                ulElement.appendChild(nameElement);
+                ulElement.appendChild(idElement);
+                ulElement.appendChild(followersElement);
+                ulElement.appendChild(followingElement);
+                ulElement.appendChild(repos);
+                document.querySelector(".input").value = '';
+                main.appendChild(ulElement);
+        }
+        
+    </script>
+</body>
+</html>
