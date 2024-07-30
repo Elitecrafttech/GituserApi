@@ -48,7 +48,7 @@
 <body>
     <main class="main">
             <h3>Type in Github Usernames below</h3>
-            <input type="text" name="" id="" class="input">
+            <input type="text" required="text" id=""   class="input">
             <button class="btn" onclick="fetchData()"> Get User</button>
     </main>
 
@@ -56,7 +56,6 @@
         const baseurl = "https://api.github.com/users";
         let btn = document.querySelector('.btn'); 
         const fetchData = async() => {
-
             btn.textContent = "Fetching ..."
             const main = document.querySelector(".main")
             const input = document.querySelector(".input").value;
@@ -91,11 +90,13 @@
                 const idElement = document.createElement("li");
                 const followersElement = document.createElement("li");
                 const followingElement = document.createElement("li");
+                const repoElement = document.createElement("li");
                 const repos = document.createElement("a");
                 const image = document.createElement("img");
 
                 const nameTextNode = document.createTextNode(`Username : ${responseData.login}`);
                 const idTextNode = document.createTextNode(`UserID : ${responseData.id}`);
+                const repo = document.createTextNode(`repository: ${responseData.public_repos}`)
                 const followersTextNode = document.createTextNode(`${responseData.followers} : Followers`);
                 const followingTextNode = document.createTextNode(`Following : ${responseData.following}`);
 
@@ -103,6 +104,7 @@
                 idElement.appendChild(idTextNode);
                 followersElement.appendChild(followersTextNode);
                 followingElement.appendChild(followingTextNode);
+                repoElement.appendChild(repo)
 
                 repos.href = responseData.html_url;
                 repos.innerHTML = "VISIT USER PROFILE";
@@ -113,6 +115,7 @@
                 ulElement.appendChild(idElement);
                 ulElement.appendChild(followersElement);
                 ulElement.appendChild(followingElement);
+                ulElement.appendChild(repoElement);
                 ulElement.appendChild(repos);
                 document.querySelector(".input").value = '';
                 main.appendChild(ulElement);
